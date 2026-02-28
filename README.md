@@ -15,6 +15,8 @@ JLC2KiCad 是一个桌面应用程序，用于从立创商城(EasyEDA/LCSC)搜�
 
 ![程序截图](src/assets/icons/1.png)
 
+![程序截图2](src/assets/icons/2.png)
+
 ## 技术栈
 
 - **前端**: Vanilla JavaScript + Vite
