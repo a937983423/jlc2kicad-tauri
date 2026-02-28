@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JLC2KiCad - KiCad元件库生成工具</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JLC2KiCad</h1>
+    </header>
+
+    <main>
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="easyeda">EasyEDA</button>
+        <button class="tab-btn" data-tab="lcsc">立创商城</button>
+        <button class="tab-btn" data-tab="local">本地文件</button>
+        <button id="networkSettingsBtn" class="tab-btn network-tab-btn" onclick="toggleNetworkSettings()">网络设置</button>
+      </div>
+
+      <!-- EasyEDA Panel -->
+      <div id="panel-easyeda" class="tab-panel active">
+        <div class="source-row">
+          <span class="source-label">EasyEDA:</span>
+          <div class="search-box">
+            <input type="text" id="easyedaInput" placeholder="支持立创商城零件编号(C开头)或元器件型号" />
+            <button class="search-btn" onclick="searchEasyEDA()">搜索</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LCSC Panel -->
+      <div id="panel-lcsc" class="tab-panel">
+        <div class="source-row">
+          <span class="source-label">立创商城:</span>
+          <div class="search-box">
+            <input type="text" id="lcscInput" placeholder="输入LCSC编号或型号" />
+            <button class="search-btn" onclick="searchLCSC()">搜索</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Local Panel -->
+      <div id="panel-local" class="tab-panel">
+        <div class="source-row">
+          <span class="source-label">本地文件:</span>
+          <div class="local-input">
+            <input type="text" id="localPath" placeholder="选择本地文件夹路径" readonly />
+            <button class="search-btn" onclick="selectFolder()">浏览</button>
+          </div>
+        </div>
+        <p class="hint">选择包含元器件数据的本地文件夹</p>
+      </div>
+
+      <!-- Results Section -->
+      <div id="resultsSection" class="results-section hidden">
+        <h2>搜索结果</h2>
+        <div id="resultsList" class="results-list"></div>
+      </div>
+
+      <!-- Export Options -->
+      <div id="exportSection" class="export-section">
+        <h2>导出选项</h2>
+        
+        <div class="selected-component">
+          <span class="label">已选择:</span>
+          <span id="selectedPart">-</span>
+        </div>
+
+        <div class="export-buttons">
+          <button class="export-btn" onclick="exportOne('symbol')">导出器件</button>
+          <button class="export-btn" onclick="exportOne('footprint')">导出封装</button>
+          <button class="export-btn" onclick="exportOne('3d')">导出3D模型</button>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="settings-section">
+        <h3>输出设置</h3>
+        <div class="form-group">
+          <label>输出目录</label>
+          <input type="text" id="outputDir" value="JLC2KiCad_lib" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>符号库名</label>
+            <input type="text" id="symbolLib" value="default_lib" />
+          </div>
+          <div class="form-group">
+            <label>封装库名</label>
+            <input type="text" id="footprintLib" value="footprint" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div id="status" class="status hidden">
+        <div class="status-header">
+          <span class="status-icon">⏳</span>
+          <span>处理中...</span>
+        </div>
+        <div id="progressLog" class="progress-log"></div>
+      </div>
+
+      <!-- Result Message -->
+      <div id="resultMessage" class="result-message hidden"></div>
+    </main>
+
+    <footer>
+      <p>Powered by EasyEDA API | 立创商城API | 本地文件</p>
+    </footer>
+  </div>
+
+  <div id="networkSettingsPanel" class="network-modal hidden" onclick="toggleNetworkSettings()">
+    <div class="network-dialog" onclick="event.stopPropagation()">
+      <h3>网络设置</h3>
+      <div class="form-group checkbox-row">
+        <label for="easyedaUseProxy">EasyEDA 使用代理</label>
+        <input type="checkbox" id="easyedaUseProxy" />
+      </div>
+      <div class="form-group checkbox-row">
+        <label for="lcscUseProxy">立创商城 使用代理</label>
+        <input type="checkbox" id="lcscUseProxy" />
+      </div>
+      <div class="form-group">
+        <label for="proxyAddress">代理地址</label>
+        <input type="text" id="proxyAddress" placeholder="http://127.0.0.1:10808" />
+      </div>
+      <p class="hint network-hint">EasyEDA 和立创商城可以分别设置是否使用代理，共享同一个代理地址</p>
+      <div class="network-buttons">
+        <button id="saveNetworkSettingsBtn" class="search-btn" onclick="saveNetworkSettings()">保存网络设置</button>
+        <button id="closeNetworkSettingsBtn" class="search-btn secondary-btn" onclick="toggleNetworkSettings()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js?v=0.0.12"></script>
+</body>
+</html>
